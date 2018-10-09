@@ -11,7 +11,7 @@
 %
 % Author & Date: Yang (i@snowztail.com) - 08 Oct 18
 function [carrierPower] = waterfilling(noiseLevel, lagrangeMultiplier, filterTaps)
-carrierPower = 1 / lagrangeMultiplier - abs(filterTaps) .^2 / noiseLevel;
+carrierPower = 1 / lagrangeMultiplier - noiseLevel ./ abs(filterTaps) .^2;
 carrierPower(carrierPower < 0) = 0;
 end
 
