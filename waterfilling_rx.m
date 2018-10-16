@@ -12,15 +12,15 @@
 %   - power allocated to subcarriers
 %
 % Author & Date: Yang (i@snowztail.com) - 09 Oct 18
-function [carrierPower] = waterfilling_rx(noiseLevel, lagrangeMultiplierLambda, lagrangeMultiplierMu, filterTaps)
+function [carrierPowerTx] = waterfilling_rx(noiseLevel, lagrangeMultiplierLambda, lagrangeMultiplierMu, filterTaps)
 nLambda = length(lagrangeMultiplierLambda);
 nCarriers = length(filterTaps);
-carrierPower = zeros(nCarriers, nLambda);
+carrierPowerTx = zeros(nCarriers, nLambda);
 
 for iLambda = 1: nLambda
-    carrierPower(:, iLambda) = 1 ./ (lagrangeMultiplierLambda(iLambda) - lagrangeMultiplierMu .* abs(filterTaps) .^2) - noiseLevel ./ abs(filterTaps) .^2;
+    carrierPowerTx(:, iLambda) = 1 ./ (lagrangeMultiplierLambda(iLambda) - lagrangeMultiplierMu .* abs(filterTaps) .^2) - noiseLevel ./ abs(filterTaps) .^2;
 end
 
-carrierPower(carrierPower < 0) = 0;
+carrierPowerTx(carrierPowerTx < 0) = 0;
 end
 
