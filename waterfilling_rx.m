@@ -9,6 +9,7 @@
 %
 % OutputArg:
 %   - power allocated to subcarriers
+%   - water level as carriers upper power plus noise bound
 %
 % Restraints:
 %   - power transmitted no more than budget
@@ -23,17 +24,19 @@
 %       always be allocated with more power in theory; otherwise, the case
 %       is invalid for current value lambda
 %
-% Author & Date: Yang (i@snowztail.com) - 09 Oct 18
+% Author & Date: Yang (i@snowztail.com) - 15 Oct 18
 
-function [carrierPowerTx] = waterfilling_rx(noiseLevel, lagrangeMultiplierLambda, lagrangeMultiplierMu, filterTaps)
+function [carrierPowerTx, waterLevel] = waterfilling_rx(noiseLevel, lagrangeMultiplierLambda, lagrangeMultiplierMu, filterTaps)
 nLambda = length(lagrangeMultiplierLambda);
 nCarriers = length(filterTaps);
 carrierPowerTx = zeros(nCarriers, nLambda);
+waterLevel = zeros(nCarriers, nLambda);
 
 % Calculate power for different lambda
 for iLambda = 1: nLambda
     carrierPowerTx(:, iLambda) = 1 ./ (lagrangeMultiplierLambda(iLambda) - lagrangeMultiplierMu .* abs(filterTaps) .^2) - noiseLevel ./ abs(filterTaps) .^2;
+    waterLevel(:, iLambda) = 1 ./ (lagrangeMultiplierLambda(iLambda) - lagrangeMultiplierMu .* abs(filterTaps) .^2);
 end
 carrierPowerTx(carrierPowerTx < 0) = 0;
+waterLevel(waterLevel < 0) = 0;
 end
-

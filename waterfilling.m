@@ -7,6 +7,7 @@
 %
 % OutputArg:
 %   - power allocated to subcarriers
+%   - water level as carriers upper power plus noise bound
 %
 % Restraints:
 %   - power transmitted no more than budget
@@ -17,8 +18,10 @@
 %
 % Author & Date: Yang (i@snowztail.com) - 08 Oct 18
 
-function [carrierPower] = waterfilling(noiseLevel, lagrangeMultiplier, filterTaps)
+function [carrierPower, waterLevel] = waterfilling(noiseLevel, lagrangeMultiplier, filterTaps)
 carrierPower = 1 / lagrangeMultiplier - noiseLevel ./ abs(filterTaps) .^2;
+waterLevel = 1 / lagrangeMultiplier;
 carrierPower(carrierPower < 0) = 0;
+waterLevel(waterLevel < 0) = 0;
 end
 
